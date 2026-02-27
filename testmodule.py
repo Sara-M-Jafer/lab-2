@@ -2,6 +2,8 @@ from  abc import ABC,abstractmethod
 class Person(ABC):
     def __init__(self, name, age):
         self._name = name
+#
+        self.__age = None
         self.age = age
 
     @property
@@ -9,12 +11,11 @@ class Person(ABC):
         return self.__age
 
     @age.setter
-    def age(self,new_age):
-        if 6 <= new_age <= 24 :
+    def age(self, new_age):
+        if isinstance(new_age, int) and 6 <= new_age <= 24:
             self.__age = new_age
         else:
             print("age must be between 6 and 24")
-
     @abstractmethod
     def display_info(self):
         pass
