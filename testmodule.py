@@ -10,7 +10,7 @@ class Person(ABC):
 
     @age.setter
     def age(self, value):
-        if 18 <= value <= 25:
+        if 18 <= value <= 28:
             self._age = value
         else:
             raise ValueError("age must be between 18 and 25")
@@ -29,7 +29,7 @@ class Student(Person):
 
     @property
     def id(self):
-        return self.id
+        return self.student_id
 
     @property
     def department(self):
@@ -111,7 +111,3 @@ class StudentManager:
         for student in self.students:
             print(student)
 
-#سارة الكود مابي اخطاء, بس اخر كلاس ما يشتغل الا نسوي استدعاءات
-
-# s =Student(1,"sara",22,"cybersecurity",3)
-# print(s)
