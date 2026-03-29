@@ -115,5 +115,5 @@ class StudentManager:
             print("no students available")
             return
 
-        list(map(lambda student: print(student), self.students))  # 👈 lambda
+        list(map(lambda student: print(student), self.students))
 
