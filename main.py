@@ -1,4 +1,4 @@
-from testmodule import Student, StudentManager, get_student_gpa, update_student_gpa
+from testmodule import Student, StudentManager, update_student_name, update_student_gpa, update_student_department, show_student_info
 
 manager = StudentManager()
 
@@ -15,13 +15,13 @@ manager.add_student(s3)
 print("\n--- All Students ---")
 manager.display_students()
 
-print("GPA of Sara:", get_student_gpa(s1))
-update_student_gpa(s1, 4.0)
-print("After Friend Update:", get_student_gpa(s1))
-
-# update student data
+#
 print("\n--- Update Student ---")
-manager.update_student(1, name="Sarah", gpa=3.9)
+for student in manager.students:
+    if student.student_id == 1:
+        update_student_name(student, "Sarah")      # Friend function لتحديث الاسم
+        update_student_gpa(student, 3.9)          # Friend fu4nction لتحديث GPA
+        update_student_department(student, "Cyber Sec")  # Friend function لتحديث القسم
 
 #after update
 manager.display_students()

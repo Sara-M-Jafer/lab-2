@@ -61,15 +61,17 @@ class Student(Person):
         return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.gpa}"
 
 # =============== Friend Functions =====================
-def get_student_gpa(student):
-    return student._Student__gpa
+def update_student_name(student, new_name):
+     student._name = new_name
 
 def update_student_gpa(student, new_gpa):
-    if 0 <= new_gpa <= 4:
-        student._Student__gpa = new_gpa
-    else:
-        print("Invalid GPA")
+    student.gpa = new_gpa
 
+def update_student_department(student, new_dpt):
+    student.department = new_dpt
+
+def show_student_info(student):
+    return f"{student.student_id} | {student._name} | {student.age} | {student.department} | {student.gpa}"
 # ================= Student Manager ======================
 class StudentManager:
     def __init__(self):
