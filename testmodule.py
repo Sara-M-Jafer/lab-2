@@ -93,7 +93,7 @@ class StudentManager:
                 self.students.remove(student)
                 print("student removed successfully")
                 return
-            print("student not found")
+        print("student not found")
 
     # display students
     def display_students(self):
