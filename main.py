@@ -1,4 +1,4 @@
-from testmodule import Student, StudentManager
+from testmodule import Student, StudentManager, get_student_gpa, update_student_gpa
 
 manager = StudentManager()
 
@@ -14,6 +14,10 @@ manager.add_student(s3)
 #show student
 print("\n--- All Students ---")
 manager.display_students()
+
+print("GPA of Sara:", get_student_gpa(s1))
+update_student_gpa(s1, 4.0)
+print("After Friend Update:", get_student_gpa(s1))
 
 # update student data
 print("\n--- Update Student ---")
