@@ -1,9 +1,9 @@
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod   #abstraction
 
 # ================= Person Class =================
 class Person(ABC):
     def __init__(self, name, age):
-        self._name = name
+        self._name = name #protect
         self.age = age
 
     @property
@@ -26,7 +26,7 @@ class Person(ABC):
 # ================= Student Class =====================
 class Student(Person):
     def __init__(self, id, name, age, department, gpa):
-        super().__init__(name, age)
+        super().__init__(name, age)  #inhertance   #extend
         self.student_id = id
         self.__department = department
         self.gpa = gpa
@@ -58,9 +58,10 @@ class Student(Person):
         return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.gpa}"
 
     def display_info(self):
-        return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.gpa}"
+        return str(self)
 
-# =============== Friend Functions =====================
+# =============== Friend Functions =========================
+#update
 def update_student_name(student, new_name):
      student._name = new_name
 
@@ -70,8 +71,7 @@ def update_student_gpa(student, new_gpa):
 def update_student_department(student, new_dpt):
     student.department = new_dpt
 
-def show_student_info(student):
-    return f"{student.student_id} | {student._name} | {student.age} | {student.department} | {student.gpa}"
+
 # ================= Student Manager ======================
 class StudentManager:
     def __init__(self):
@@ -89,35 +89,11 @@ class StudentManager:
     # remove student
     def remove_student(self, student_id):
         for student in self.students:
-            if (lambda s: s.student_id == student_id)(student):  #llambda
+            if student.student_id == student_id:
                 self.students.remove(student)
                 print("student removed successfully")
                 return
-        print("student not found")
-
-    # update student
-    def update_student(self, student_id, **new):
-        for student in self.students:
-            if (lambda s: s.student_id == student_id)(student):
-
-                ptr = student  # 👈 pointer to object
-
-                if "name" in new:
-                    (lambda: setattr(ptr, "_name", new["name"]))()
-
-                if "age" in new:
-                    (lambda: setattr(ptr, "age", new["age"]))()
-
-                if "department" in new:
-                    (lambda: setattr(ptr, "department", new["department"]))()
-
-                if "gpa" in new:
-                    (lambda: setattr(ptr, "gpa", new["gpa"]))()
-
-                print("student updated successfully")
-                return
-
-        print("student not found")
+            print("student not found")
 
     # display students
     def display_students(self):
@@ -125,5 +101,5 @@ class StudentManager:
             print("no students available")
             return
 
-        list(map(lambda student: print(student), self.students))
+        list(map(lambda s: print(s), self.students))#lambda
 
