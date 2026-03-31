@@ -32,10 +32,6 @@ class Student(Person):
         self.gpa = gpa
 
     @property
-    def id(self):
-        return self.student_id
-
-    @property
     def department(self):
         return self.__department
 
@@ -60,16 +56,33 @@ class Student(Person):
     def display_info(self):
         return str(self)
 
-# =============== Friend Functions =========================
-#update
+# =============== Friend Functions & Pointer =========================
 def update_student_name(student, new_name):
-     student._name = new_name
+    ptr = student  # pointer
+
+    print("\n[Pointer Check - Name]")
+    print("ptr is student:", ptr is student)
+
+    ptr._name = new_name
+
 
 def update_student_gpa(student, new_gpa):
-    student.gpa = new_gpa
+    ptr = student  # pointer
+
+    print("\n[Pointer Check - GPA]")
+    print("ptr is student:", ptr is student)
+
+    ptr.gpa = new_gpa
+
 
 def update_student_department(student, new_dpt):
-    student.department = new_dpt
+    ptr = student  # pointer
+
+    print("\n[Pointer Check - Department]")
+    print("ptr is student:", ptr is student)
+
+    ptr.department = new_dpt
+
 
 
 # ================= Student Manager ======================
@@ -93,7 +106,7 @@ class StudentManager:
                 self.students.remove(student)
                 print("student removed successfully")
                 return
-            print("student not found")
+        print("student not found")
 
     # display students
     def display_students(self):
