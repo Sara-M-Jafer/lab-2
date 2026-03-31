@@ -47,3 +47,4 @@ manager.remove_student(2)
 # after delete
 manager.display_students()
 
+

@@ -84,7 +84,6 @@ def update_student_department(student, new_dpt):
     ptr.department = new_dpt
 
 
-
 # ================= Student Manager ======================
 class StudentManager:
     def __init__(self):
