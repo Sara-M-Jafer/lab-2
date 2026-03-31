@@ -56,6 +56,30 @@ class Student(Person):
     def display_info(self):
         return str(self)
 
+# ====== Operator Overloading ======
+
+    def __eq__(self, other):
+        if not isinstance(other, Student):
+            return NotImplemented
+        return self.gpa == other.gpa
+
+    def __lt__(self, other):
+        if not isinstance(other, Student):
+            return NotImplemented
+        return self.gpa < other.gpa
+
+    def __add__(self, other):
+        if not isinstance(other, Student):
+            return NotImplemented
+        return (self.gpa + other.gpa) / 2
+
+    def __iadd__(self, value):
+        self.gpa += value
+        return self
+
+    def __bool__(self):
+        return self.gpa >= 2
+
 # =============== Friend Functions & Pointer =========================
 
 def update_student_name(student, new_name):
@@ -88,7 +112,6 @@ def update_student_department(student, new_dpt):
     ptr.department = new_dpt
 
 
-
 # ================= Student Manager ======================
 class StudentManager:
     def __init__(self):
@@ -97,6 +120,12 @@ class StudentManager:
     # number of students
     def __len__(self):
         return len(self.students)
+
+    def __getitem__(self, index):
+        return self.students[index]
+
+    def __contains__(self, student_id):
+        return any(s.student_id == student_id for s in self.students)
 
     # add student
     def add_student(self, student):
@@ -125,5 +154,3 @@ class StudentManager:
     def find_student(self, student_id):
         result = list(filter(lambda s: s.student_id == student_id, self.students))
         return result[0] if result else None
-
-

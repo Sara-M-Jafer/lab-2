@@ -30,12 +30,37 @@ list(map(lambda s: print(s.display_info()),high))
 for student in manager.students:
     if student.student_id == 1:
         update_student_name(student, "Sarah")
-        update_student_gpa(student, 3.9)
+        update_student_gpa(student, 3.8)
         update_student_department(student, "Cyber Security")
 
 #after update
 print("\n--- Update Student ---")
 manager.display_students()
+
+# operator overloading tests
+print("\n--- Comparison ---")
+print(s1 > s2)
+
+print("\n--- Sorting ---")
+manager.students.sort()
+manager.display_students()
+
+print("\n--- Add GPA ---")
+print(s1 + s2)
+
+print("\n--- In-place ---")
+s1 += 0.2
+print(s1)
+
+print("\n--- Bool ---")
+if s1:
+    print("Student Passed")
+
+print("\n--- Contains ---")
+print(1 in manager)
+
+print("\n--- Indexing ---")
+print(manager[0])
 
 #number of student
 print("\nNumber of students:", len(manager))
