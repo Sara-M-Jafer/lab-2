@@ -21,12 +21,12 @@ manager.add_student(s6)
 print("\n--- All Students ---")
 manager.display_students()
 
-print("\n high gpa student")
+print("\n High GPA Student")
 high = list(filter(lambda s:s.gpa >= 2 ,manager.students))
 list(map(lambda s: print(s.display_info()),high))
 
 #update student
-print("\n--- Update Student ---")
+
 for student in manager.students:
     if student.student_id == 1:
         update_student_name(student, "Sarah")
@@ -34,17 +34,28 @@ for student in manager.students:
         update_student_department(student, "Cyber Security")
 
 #after update
+print("\n--- Update Student ---")
 manager.display_students()
 
 #number of student
 print("\nNumber of students:", len(manager))
 
-
 # delete student
 print("\n--- Remove Student ---")
 manager.remove_student(2)
+manager.remove_student(6)
 
 # after delete
+print("\n--- All Students ---")
 manager.display_students()
+
+#search
+print("\n--- Search Student ---")
+found = manager.find_student(3)
+
+if found:
+    print(found)
+else:
+    print("Student not found")
 
 

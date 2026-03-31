@@ -57,31 +57,36 @@ class Student(Person):
         return str(self)
 
 # =============== Friend Functions & Pointer =========================
-def update_student_name(student, new_name):
-    ptr = student  # pointer
 
-    print("\n[Pointer Check - Name]")
+def update_student_name(student, new_name):
+    ptr = student
+
+    print("\n[ Check - Name]")
     print("ptr is student:", ptr is student)
+
 
     ptr._name = new_name
 
 
 def update_student_gpa(student, new_gpa):
-    ptr = student  # pointer
+    ptr = student
 
-    print("\n[Pointer Check - GPA]")
+    print("\n[ Check - GPA]")
     print("ptr is student:", ptr is student)
+
 
     ptr.gpa = new_gpa
 
 
 def update_student_department(student, new_dpt):
-    ptr = student  # pointer
+    ptr = student
 
-    print("\n[Pointer Check - Department]")
+    print("\n[ Check - Department]")
     print("ptr is student:", ptr is student)
 
+
     ptr.department = new_dpt
+
 
 
 # ================= Student Manager ======================
@@ -113,5 +118,12 @@ class StudentManager:
             print("no students available")
             return
 
-        list(map(lambda s: print(s), self.students))#lambda
+        for s in self.students:
+            print(s)
+
+    #find student
+    def find_student(self, student_id):
+        result = list(filter(lambda s: s.student_id == student_id, self.students))
+        return result[0] if result else None
+
 
