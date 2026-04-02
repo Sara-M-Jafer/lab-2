@@ -45,8 +45,6 @@ print("\n--- Sorting ---")
 manager.students.sort()
 manager.display_students()
 
-print("\n--- Add GPA ---")
-print(s1 + s2)
 
 print("\n--- In-place ---")
 s1 += 0.2

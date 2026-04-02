@@ -68,17 +68,13 @@ class Student(Person):
             return NotImplemented
         return self.gpa < other.gpa
 
-    def __add__(self, other):
-        if not isinstance(other, Student):
-            return NotImplemented
-        return (self.gpa + other.gpa) / 2
-
     def __iadd__(self, value):
         self.gpa += value
         return self
 
     def __bool__(self):
         return self.gpa >= 2
+
 
 # =============== Friend Functions & Pointer =========================
 
@@ -87,7 +83,6 @@ def update_student_name(student, new_name):
 
     print("\n[ Check - Name]")
     print("ptr is student:", ptr is student)
-
 
     ptr._name = new_name
 
@@ -98,7 +93,6 @@ def update_student_gpa(student, new_gpa):
     print("\n[ Check - GPA]")
     print("ptr is student:", ptr is student)
 
-
     ptr.gpa = new_gpa
 
 
@@ -107,7 +101,6 @@ def update_student_department(student, new_dpt):
 
     print("\n[ Check - Department]")
     print("ptr is student:", ptr is student)
-
 
     ptr.department = new_dpt
 
