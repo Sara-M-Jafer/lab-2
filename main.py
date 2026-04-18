@@ -80,5 +80,3 @@ if found:
     print(found)
 else:
     print("Student not found")
-
-

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod   #abstraction
 
 # ================= Person Class =================
 class Person(ABC):
-    def __init__(self, name, age):
+    def init(self, name, age):
         self._name = name #protect
         self.age = age
 
@@ -26,10 +26,10 @@ class Person(ABC):
 # ================= Student Class =====================
 class Student(Person):
     def __init__(self, id, name, age, department, gpa):
-        super().__init__(name, age)  #inhertance   #extend
+        super().init(name, age)  #inhertance   #extend
         self.student_id = id
-        self.__department = department
-        self.gpa = gpa
+        self.department = department
+        self.__gpa = gpa
 
     @property
     def department(self):
@@ -51,7 +51,7 @@ class Student(Person):
             raise ValueError("gpa must be between 0 and 4")
 
     def __str__(self):
-        return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.gpa}"
+        return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.__gpa}"
 
     def display_info(self):
         return str(self)
@@ -66,14 +66,14 @@ class Student(Person):
     def __lt__(self, other):
         if not isinstance(other, Student):
             return NotImplemented
-        return self.gpa < other.gpa
+        return self.__gpa < other.__gpa
 
     def __iadd__(self, value):
-        self.gpa += value
+        self.__gpa += value
         return self
 
     def __bool__(self):
-        return self.gpa >= 2
+        return self.__gpa >= 2
 
 
 # =============== Friend Functions & Pointer =========================
