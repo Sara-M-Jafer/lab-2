@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod   #abstraction
+from functools import total_ordering
+from dataclasses import dataclass
 
 # ================= Person Class =================
 class Person(ABC):
-    def init(self, name, age):
+    def __init__(self, name, age):
         self._name = name #protect
         self.age = age
 
@@ -24,12 +26,13 @@ class Person(ABC):
 
 
 # ================= Student Class =====================
+@total_ordering
 class Student(Person):
     def __init__(self, id, name, age, department, gpa):
-        super().init(name, age)  #inhertance   #extend
+        super().__init__(name, age)  #inhertance   #extend
         self.student_id = id
         self.department = department
-        self.__gpa = gpa
+        self.gpa = gpa
 
     @property
     def department(self):
@@ -61,7 +64,7 @@ class Student(Person):
     def __eq__(self, other):
         if not isinstance(other, Student):
             return NotImplemented
-        return self.gpa == other.gpa
+        return self.__gpa == other.gpa
 
     def __lt__(self, other):
         if not isinstance(other, Student):
@@ -69,15 +72,53 @@ class Student(Person):
         return self.__gpa < other.__gpa
 
     def __iadd__(self, value):
-        self.__gpa += value
+        # Context-aware
+        if isinstance(value, (int, float)):
+            self.gpa += value
+        elif isinstance(value, Student):
+            self.gpa += value.gpa
+        else:
+            return NotImplemented
         return self
 
     def __bool__(self):
-        return self.__gpa >= 2
+        return self.gpa >= 2
+
+    # Immutable style
+    def add_bonus(self, value):
+        return Student(self.student_id, self._name, self.age, self.department, self.gpa + value)
+
+    # def __iadd__(self, value):
+    #
+    #     self.__gpa += value
+    #     return self
+    #
+    # def __bool__(self):
+    #     return self.__gpa >= 2
+
+# =============== Callable Object =================
+class GPAChecker:
+    def __init__(self, min_val, max_val):
+        self.min = min_val
+        self.max = max_val
+
+    def __call__(self, student):
+        return self.min <= student.gpa <= self.max
+
+
+# =============== Pipe Operator =================
+class Pipe:
+    def __init__(self, func):
+        self.func = func
+
+    def __ror__(self, other):
+        return self.func(other)
+
+    def __or__(self, other):
+        return Pipe(lambda x: other.func(self.func(x)))
 
 
 # =============== Friend Functions & Pointer =========================
-
 def update_student_name(student, new_name):
     ptr = student
 
@@ -109,6 +150,7 @@ def update_student_department(student, new_dpt):
 class StudentManager:
     def __init__(self):
         self.students = []
+
 
     # number of students
     def __len__(self):
@@ -147,3 +189,10 @@ class StudentManager:
     def find_student(self, student_id):
         result = list(filter(lambda s: s.student_id == student_id, self.students))
         return result[0] if result else None
+
+# ================= Dataclass ======================
+@dataclass(order=True)
+class StudentRecord:
+    student_id: int
+    name: str
+    gpa: float

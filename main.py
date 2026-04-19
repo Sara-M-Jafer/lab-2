@@ -1,4 +1,4 @@
-from testmodule import Student, StudentManager, update_student_name, update_student_gpa, update_student_department
+from testmodule import Student, StudentManager, update_student_name, update_student_gpa, update_student_department,GPAChecker,Pipe,StudentRecord
 
 manager = StudentManager()
 
@@ -21,30 +21,30 @@ manager.add_student(s6)
 print("\n--- All Students ---")
 manager.display_students()
 
-print("\n High GPA Student")
-high = list(filter(lambda s:s.gpa >= 2 ,manager.students))
-list(map(lambda s: print(s.display_info()),high))
+# ================= Callable =================
+print("\n--- Valid GPA Students ---")
+checker = GPAChecker(2, 4)
+valid_students = list(filter(checker, manager.students))
+for s in valid_students:
+    print(s)
 
-#update student
-
+# ================= Update =================
 for student in manager.students:
     if student.student_id == 1:
         update_student_name(student, "Sarah")
         update_student_gpa(student, 3.8)
         update_student_department(student, "Cyber Security")
 
-#after update
-print("\n--- Update Student ---")
+print("\n--- After Update ---")
 manager.display_students()
 
-# operator overloading tests
+# ================= Operator Overloading =================
 print("\n--- Comparison ---")
 print(s1 > s2)
 
 print("\n--- Sorting ---")
 manager.students.sort()
 manager.display_students()
-
 
 print("\n--- In-place ---")
 s1 += 0.2
@@ -54,25 +54,41 @@ print("\n--- Bool ---")
 if s1:
     print("Student Passed")
 
+# ================= Pipe =================
+filter_passed = Pipe(lambda students: [s for s in students if s.gpa >= 2])
+get_names = Pipe(lambda students: [s._name for s in students])
+
+result = manager.students | filter_passed | get_names
+
+print("\n--- Pipeline Result ---")
+print(result)
+
+# ================= Dataclass =================
+records = [StudentRecord(s.student_id, s._name, s.gpa) for s in manager.students]
+
+print("\n--- Records ---")
+for r in records:
+    print(r)
+
+print("\n--- Sorted Records ---")
+print(sorted(records))
+
+# ================= Manager Features =================
 print("\n--- Contains ---")
 print(1 in manager)
 
 print("\n--- Indexing ---")
 print(manager[0])
 
-#number of student
 print("\nNumber of students:", len(manager))
 
-# delete student
 print("\n--- Remove Student ---")
 manager.remove_student(2)
 manager.remove_student(6)
 
-# after delete
 print("\n--- All Students ---")
 manager.display_students()
 
-#search
 print("\n--- Search Student ---")
 found = manager.find_student(3)
 
@@ -80,3 +96,4 @@ if found:
     print(found)
 else:
     print("Student not found")
+
