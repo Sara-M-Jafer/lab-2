@@ -1,12 +1,20 @@
-from abc import ABC, abstractmethod   #abstraction
-from functools import total_ordering
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-# ================= Person Class =================
+#============= logger mixin ================
+class LoggerMixin:
+    def log(self,message):
+        print(f"[log]:{message}")
+
+# ================= Person =================
 class Person(ABC):
     def __init__(self, name, age):
-        self._name = name #protect
+        self._name = name
         self.age = age
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def age(self):
@@ -23,13 +31,10 @@ class Person(ABC):
     def display_info(self):
         pass
 
-
-
-# ================= Student Class =====================
-@total_ordering
-class Student(Person):
+# ================= Student =====================
+class Student(Person,LoggerMixin):
     def __init__(self, id, name, age, department, gpa):
-        super().__init__(name, age)  #inhertance   #extend
+        super().__init__(name, age)
         self.student_id = id
         self.department = department
         self.gpa = gpa
@@ -54,49 +59,29 @@ class Student(Person):
             raise ValueError("gpa must be between 0 and 4")
 
     def __str__(self):
-        return f"Student_ID: {self.student_id} | Name:{self._name} | Age:{self.age} | Department:{self.department} | GPA:{self.__gpa}"
+        return f"Student_ID: {self.student_id} | Name:{self.name} | Age:{self.age} | Department:{self.department} | GPA:{self.gpa}"
 
     def display_info(self):
         return str(self)
 
 # ====== Operator Overloading ======
-
     def __eq__(self, other):
-        if not isinstance(other, Student):
-            return NotImplemented
-        return self.__gpa == other.gpa
+        return isinstance(other, Student) and self.gpa == other.gpa
 
     def __lt__(self, other):
-        if not isinstance(other, Student):
-            return NotImplemented
-        return self.__gpa < other.__gpa
+        return self.gpa < other.gpa
 
     def __iadd__(self, value):
-        # Context-aware
         if isinstance(value, (int, float)):
-            self.gpa = min(4, self.gpa + value)
+            self.gpa = min(self.gpa + value, 4)
         elif isinstance(value, Student):
-            self.gpa = min(4, self.gpa + value.gpa)
-        else:
-            return NotImplemented
+            self.gpa = min(self.gpa + value.gpa, 4)
         return self
 
     def __bool__(self):
         return self.gpa >= 2
 
-    # Immutable style
-    def add_bonus(self, value):
-        return Student(self.student_id, self._name, self.age, self.department, self.gpa + value)
-
-    # def __iadd__(self, value):
-    #
-    #     self.__gpa += value
-    #     return self
-    #
-    # def __bool__(self):
-    #     return self.__gpa >= 2
-
-# =============== Callable Object =================
+# =============== Callable =================
 class GPAChecker:
     def __init__(self, min_val, max_val):
         self.min = min_val
@@ -104,7 +89,6 @@ class GPAChecker:
 
     def __call__(self, student):
         return self.min <= student.gpa <= self.max
-
 
 # =============== Pipe Operator =================
 class Pipe:
@@ -118,41 +102,28 @@ class Pipe:
         return Pipe(lambda x: other.func(self.func(x)))
 
 
-# =============== Friend Functions & Pointer =========================
+# =============== Friend =========================
 def update_student_name(student, new_name):
     ptr = student
-
     print("\n[ Check - Name]")
     print("ptr is student:", ptr is student)
-
     ptr._name = new_name
 
+# ================= Dataclass ======================
+@dataclass(order=True)
+class StudentRecord:
+    student_id: int
+    name: str
+    gpa: float
 
-def update_student_gpa(student, new_gpa):
-    ptr = student
+    def __str__(self):
+        return f"ID:{self.student_id} | name:{self.name} | GPA:{self.gpa}"
 
-    print("\n[ Check - GPA]")
-    print("ptr is student:", ptr is student)
-
-    ptr.gpa = new_gpa
-
-
-def update_student_department(student, new_dpt):
-    ptr = student
-
-    print("\n[ Check - Department]")
-    print("ptr is student:", ptr is student)
-
-    ptr.department = new_dpt
-
-
-# ================= Student Manager ======================
-class StudentManager:
+# ================= Manager ======================
+class StudentManager(LoggerMixin):
     def __init__(self):
         self.students = []
 
-
-    # number of students
     def __len__(self):
         return len(self.students)
 
@@ -165,34 +136,43 @@ class StudentManager:
     # add student
     def add_student(self, student):
         self.students.append(student)
-        print("student added successfully")
+        self.log(f"added student{student.student_id}")
+        # print("student added successfully")
 
     # remove student
     def remove_student(self, student_id):
         for student in self.students:
             if student.student_id == student_id:
                 self.students.remove(student)
-                print("student removed successfully")
+                self.log(f"removed student{student_id}")
+                # print("student removed successfully")
                 return
         print("student not found")
 
-    # display students
-    def display_students(self):
-        if not self.students:
-            print("no students available")
-            return
-
-        for s in self.students:
-            print(s)
-
-    #find student
     def find_student(self, student_id):
-        result = list(filter(lambda s: s.student_id == student_id, self.students))
-        return result[0] if result else None
+        for s in self.students:
+            if s.student_id == student_id:
+                self.log(f"Found student {student_id}")
+                return s
+        self.log("Student not found")
+        return None
 
-# ================= Dataclass ======================
-@dataclass(order=True)
-class StudentRecord:
-    student_id: int
-    name: str
-    gpa: float
+    def display_students(self):
+        for s in self.students:
+            print(s.display_info())
+
+    def filter_students(self, checker):
+        return list(filter(checker, self.students))
+
+    def pipeline_gpa(self):
+        to_percent = Pipe(lambda s: s.gpa * 25)
+        return [s | to_percent for s in self.students]
+
+    def sorted_records(self):
+        records = [
+            StudentRecord(s.student_id, s.name, s.gpa)
+            for s in self.students
+        ]
+        return sorted(records, reverse=True)
+
+
