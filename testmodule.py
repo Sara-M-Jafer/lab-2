@@ -74,9 +74,9 @@ class Student(Person):
     def __iadd__(self, value):
         # Context-aware
         if isinstance(value, (int, float)):
-            self.gpa += value
+            self.gpa = min(4, self.gpa + value)
         elif isinstance(value, Student):
-            self.gpa += value.gpa
+            self.gpa = min(4, self.gpa + value.gpa)
         else:
             return NotImplemented
         return self
